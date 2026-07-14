@@ -1,9 +1,8 @@
-import { test } from '@playwright/test';
-import { LoginData, LoginPage } from '../../pages/LoginPage';
+import { test, expect } from '../../fixtures/fixtures';
+import { LoginData } from '../../pages/LoginPage';
 
 test.describe('Login', () => {
-  test('User can login with valid credentials', async ({ page }) => {
-    const loginPage = new LoginPage(page);
+  test('User can login with valid credentials', async ({ loginPage }) => {
     const loginData: LoginData = {
       email: 'abidek@gmail.com',
       password: 'test123',

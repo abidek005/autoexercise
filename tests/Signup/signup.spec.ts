@@ -1,8 +1,7 @@
-import { test } from '@playwright/test';
-import { SignupData, SignupPage } from '../../pages/SignupPage';
+import { test } from '../../fixtures/fixtures';
+import { SignupData } from '../../pages/SignupPage';
 
-test('User can register a new account', async ({ page }) => {
-  const signupPage = new SignupPage(page);
+test('User can register a new account', async ({ signupPage }) => {
   const email = `test${Date.now()}@gmail.com`;
   const signupData: SignupData = {
     name: 'First',
