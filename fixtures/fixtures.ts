@@ -7,6 +7,8 @@ import { CartPage } from '../pages/CartPage';
 import { CheckoutPage } from '../pages/CheckoutPage';
 import { PaymentPage } from '../pages/PaymentPage';
 
+import { blockAdvertisements } from '../helpers/adHelper';
+
 type Fixtures = {
   loginPage: LoginPage;
   signupPage: SignupPage;
@@ -18,27 +20,32 @@ type Fixtures = {
 
 export const test = base.extend<Fixtures>({
   loginPage: async ({ page }, use) => {
+    await blockAdvertisements(page);
     await use(new LoginPage(page));
   },
 
   signupPage: async ({ page }, use) => {
+    await blockAdvertisements(page);
     await use(new SignupPage(page));
   },
 
   searchPage: async ({ page }, use) => {
+    await blockAdvertisements(page);
     await use(new SearchPage(page));
   },
 
   cartPage: async ({ page }, use) => {
+    await blockAdvertisements(page);
     await use(new CartPage(page));
   },
 
   checkoutPage: async ({ page }, use) => {
+    await blockAdvertisements(page);
     await use(new CheckoutPage(page));
   },
 
-  // ✅ THIS IS WHAT WAS MISSING
   paymentPage: async ({ page }, use) => {
+    await blockAdvertisements(page);
     await use(new PaymentPage(page));
   },
 });
