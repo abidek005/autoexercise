@@ -1,100 +1,104 @@
-# 🎭 Automation Exercise - Playwright Test Framework
+# Automation Exercise - Playwright TypeScript Framework
 
-A UI automation framework built with **Playwright** and **TypeScript** using the **Page Object Model (POM)** design pattern. This project automates end-to-end test scenarios for the Automation Exercise demo application.
+A scalable end-to-end automation testing framework built using **Playwright** and **TypeScript** following industry best practices such as **Page Object Model (POM)**, **Fixtures**, reusable test data, and **GitHub Actions CI/CD**.
 
-## 🚀 Tech Stack
+---
+
+## Tech Stack
 
 - Playwright
 - TypeScript
 - Node.js
 - GitHub Actions
 - Page Object Model (POM)
-- Prettier
+- Playwright Fixtures
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
-```
+```text
 automationexercise/
 │
-├── pages/                 # Page Object Models
-│   ├── HomePage.ts
+├── .github/
+│   └── workflows/
+│       └── playwright.yml
+│
+├── fixtures/
+│   └── fixtures.ts
+│
+├── pages/
+│   ├── CartPage.ts
 │   ├── LoginPage.ts
-│   ├── SignupPage.ts
+│   ├── SearchPage.ts
+│   └── SignupPage.ts
 │
 ├── tests/
-│   ├── authentication/
-│   ├── signup/
+│   ├── Authentication/
+│   │   ├── login.spec.ts
+│   │   └── invalidlogin.spec.ts
+│   │
+│   ├── product/
+│   │   ├── addcart.spec.ts
+│   │   └── searchproduct.spec.ts
+│   │
+│   └── Signup/
+│       ├── signup.spec.ts
+│       └── signupexistemail.spec.ts
 │
-├── fixtures/              # Test data
-├── utils/                 # Helper methods
 ├── playwright.config.ts
 ├── package.json
+├── tsconfig.json
 └── README.md
 ```
 
 ---
 
-## ✅ Test Coverage
+## Features
+
+- Page Object Model (POM)
+- Playwright Fixtures
+- Cross-browser testing
+- GitHub Actions CI
+- Reusable page objects
+- Reusable test methods
+- Stable locators (`data-qa`, IDs, CSS)
+- HTML Test Reports
+- Automatic screenshots on failure
+- Automatic trace collection
+
+---
+
+## Test Coverage
 
 ### Authentication
 
-- Login with valid credentials
-- Login with invalid credentials
-- Logout successfully
+- ✅ Successful Login
+- ✅ Invalid Login
+- ✅ Empty Email
+- ✅ Empty Password
+- ✅ Invalid Email Format
+- ✅ SQL Injection Validation
+- ✅ XSS Validation
+
+---
 
 ### Signup
 
-- Register a new user
-- Register with an existing email
-- Delete account
+- ✅ Register New User
+- ✅ Existing Email Validation
 
 ---
 
-## 🏗 Framework Features
+### Product
 
-- Page Object Model (POM)
-- Cross-browser testing
-- HTML reporting
-- Parallel execution
-- Automatic screenshots on failure
-- Video recording on failure
-- Trace collection on retry
-- GitHub Actions CI/CD
-- Prettier code formatting
+- ✅ Search Product
+- ✅ View Product
+- ✅ Add Multiple Products to Cart
 
 ---
 
-## ⚙️ Installation
-
-Clone the repository
-
-```bash
-git clone https://github.com/abidek005/autoexercise.git
-```
-
-Navigate to the project
-
-```bash
-cd autoexercise
-```
-
-Install dependencies
-
-```bash
-npm install
-```
-
-Install Playwright browsers
-
-```bash
-npx playwright install
-```
-
----
-
-## ▶️ Running Tests
+## Running Tests
 
 Run all tests
 
@@ -105,34 +109,34 @@ npx playwright test
 Run Chromium only
 
 ```bash
-npx playwright test --project=Chromium
+npx playwright test --project=chromium
 ```
 
-Run Firefox only
+Run Firefox
 
 ```bash
-npx playwright test --project=Firefox
+npx playwright test --project=firefox
 ```
 
-Run WebKit only
+Run WebKit
 
 ```bash
-npx playwright test --project=WebKit
+npx playwright test --project=webkit
 ```
 
-Run headed
+Run a single test
+
+```bash
+npx playwright test tests/Authentication/login.spec.ts
+```
+
+Run in headed mode
 
 ```bash
 npx playwright test --headed
 ```
 
-Run UI Mode
-
-```bash
-npx playwright test --ui
-```
-
-Debug tests
+Debug a test
 
 ```bash
 npx playwright test --debug
@@ -140,7 +144,9 @@ npx playwright test --debug
 
 ---
 
-## 📊 View Test Report
+## Test Reports
+
+Generate HTML report
 
 ```bash
 npx playwright show-report
@@ -148,58 +154,49 @@ npx playwright show-report
 
 ---
 
-## 🎨 Format Code
+## Continuous Integration
 
-Automatically format the project
+This project includes a GitHub Actions workflow that:
 
-```bash
-npm run format
-```
-
-Check formatting
-
-```bash
-npm run format:check
-```
+- Installs dependencies
+- Installs Playwright browsers
+- Executes tests
+- Publishes Playwright HTML reports
 
 ---
 
-## 🔄 Continuous Integration
+## Design Pattern
 
-GitHub Actions automatically executes the test suite when:
+This framework follows the **Page Object Model (POM)** design pattern.
 
-- Code is pushed to **staging**
-- Code is pushed to **main**
-- A Pull Request is opened against **staging**
-- A Pull Request is opened against **main**
+Each page contains:
 
-The workflow:
+- Page locators
+- Business actions
+- Assertions
 
-1. Checks out the repository
-2. Installs Node.js
-3. Installs project dependencies
-4. Installs Playwright browsers
-5. Executes the test suite
-6. Uploads the HTML report as an artifact
+Fixtures are used to inject page objects into tests, reducing duplication and improving maintainability.
 
 ---
 
-## 📸 Reporting
+## Future Enhancements
 
-Playwright generates:
-
-- HTML Reports
-- Screenshots on failure
-- Videos on failure
-- Trace files for failed retries
+- API Testing
+- Allure Reports
+- Data-driven testing
+- Environment configuration
+- Visual Testing
+- Accessibility Testing
+- Docker support
+- Performance Testing
+- Parallel execution improvements
 
 ---
 
-## 👨‍💻 Author
+## Author
 
 **Abidemi Ogunjobi**
 
-QA Automation Engineer
+Senior QA Automation Engineer
 
-GitHub:
-https://github.com/abidek005
+Playwright | TypeScript | API Testing | CI/CD | GitHub Actions
