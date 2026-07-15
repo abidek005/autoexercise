@@ -1,6 +1,6 @@
 import { test } from '../../fixtures/fixtures';
 
-test.describe('Shopping Cart', () => {
+test.describe('@regression Shopping Cart', () => {
   test('Add multiple products to cart', async ({ cartPage }) => {
     await cartPage.goto();
     await cartPage.acceptCookiesIfVisible();

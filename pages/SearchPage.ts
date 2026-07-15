@@ -4,11 +4,35 @@ export class SearchPage {
   constructor(readonly page: Page) {}
 
   async goto() {
-    await this.page.goto('https://automationexercise.com/products', {
-      waitUntil: 'domcontentloaded',
-      timeout: 60000,
-    });
-    await this.page.waitForLoadState('networkidle', { timeout: 10000 }).catch(() => undefined);
+    for (let attempt = 0; attempt < 3; attempt++) {
+      await this.page.goto('https://automationexercise.com/products', {
+        waitUntil: 'domcontentloaded',
+        timeout: 60000,
+      });
+
+      const heavyLoadHeading = this.page.getByRole('heading', {
+        name: /under heavy load/i,
+      });
+
+      const isHeavyLoad = await heavyLoadHeading.isVisible().catch(() => false);
+
+      if (!isHeavyLoad) {
+        // Wait for the search input to be ready rather than relying on
+        // networkidle, which can stall indefinitely due to ad iframes.
+        await this.page
+          .locator('#search_product')
+          .waitFor({ state: 'visible', timeout: 20000 });
+
+        return;
+      }
+
+      await this.page.reload({
+        waitUntil: 'domcontentloaded',
+        timeout: 60000,
+      });
+    }
+
+    throw new Error('Automation Exercise is still under heavy load after retries.');
   }
 
   async acceptCookiesIfVisible() {

@@ -1,43 +1,51 @@
-import { test, expect } from '../../fixtures/fixtures';
+import { test } from '../../fixtures/fixtures';
 
-test.describe('Payment', () => {
+test.describe('@smoke @regression Payment', () => {
+
   test.beforeEach(async ({
-    loginPage,
-    cartPage,
     checkoutPage,
+    cartPage,
   }) => {
+
+    // Open website
+    await checkoutPage.goto();
+    await checkoutPage.acceptCookiesIfVisible();
+
     // Login
-    await loginPage.goto();
-    await loginPage.acceptCookiesIfVisible();
-    await loginPage.openLoginPage();
+    await checkoutPage.login(
+      'abidek@gmail.com',
+      'test123'
+    );
 
-    await loginPage.fillLoginCredentials({
-      email: 'abidek@gmail.com',
-      password: 'test123',
-    });
-
-    await loginPage.submitLogin();
-    await loginPage.expectLoggedIn();
+    // Products
+    await checkoutPage.openProducts();
+    await checkoutPage.closeAdvertisementIfVisible();
 
     // Add products
-    await cartPage.goto();
-
     await cartPage.addProductToCart(2);
+
     await cartPage.addProductToCart(3);
+
     await cartPage.addProductToCart(4);
 
-    // Open cart
+    // Cart
     await cartPage.openCart();
+
     await cartPage.expectCartPage();
 
-    // Proceed to payment page
+    // Checkout
     await checkoutPage.proceedToCheckout();
+
     await checkoutPage.placeOrder();
+
+    await checkoutPage.expectPaymentPage();
+
   });
 
-  test('User can successfully complete payment', async ({
+  test('@smoke User can successfully complete payment', async ({
     paymentPage,
   }) => {
+
     await paymentPage.fillPaymentDetails(
       'First Test',
       '456798023456097',
@@ -49,5 +57,7 @@ test.describe('Payment', () => {
     await paymentPage.clickPayAndConfirmOrder();
 
     await paymentPage.expectOrderConfirmed();
+
   });
+
 });

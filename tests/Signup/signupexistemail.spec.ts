@@ -2,7 +2,9 @@ import { test, expect } from '../../fixtures/fixtures';
 import { SignupData } from '../../pages/SignupPage';
 
 test.describe('Signup - Existing Email', () => {
-  test('User cannot register with an existing email address', async ({ signupPage }) => {
+  test('@regression User cannot register with an existing email address', async ({
+    signupPage,
+  }) => {
     await signupPage.goto();
     await signupPage.acceptCookiesIfVisible();
 
@@ -32,10 +34,6 @@ test.describe('Signup - Existing Email', () => {
 
     await signupPage.fillSignupForm(signupData.name, signupData.email);
     await signupPage.submitSignup();
-
-    // Verify error message
-    await expect(
-      signupPage.page.getByText('Email Address already exist!')
-    ).toBeVisible({ timeout: 15000 });
+    await signupPage.expectExistingEmailError();
   });
 });

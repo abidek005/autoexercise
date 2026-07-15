@@ -4,14 +4,31 @@ export class CheckoutPage {
   constructor(readonly page: Page) {}
 
   async goto() {
-    await this.page.goto('https://automationexercise.com/', {
-      waitUntil: 'domcontentloaded',
-      timeout: 60000,
-    });
+    for (let attempt = 0; attempt < 3; attempt++) {
+      await this.page.goto('https://automationexercise.com/', {
+        waitUntil: 'domcontentloaded',
+        timeout: 60000,
+      });
 
-    await this.page
-      .waitForLoadState('networkidle', { timeout: 10000 })
-      .catch(() => undefined);
+      const heavyLoadHeading = this.page.getByRole('heading', {
+        name: /under heavy load/i,
+      });
+
+      const isHeavyLoad = await heavyLoadHeading.isVisible().catch(() => false);
+
+      if (!isHeavyLoad) {
+        await this.page.locator('a[href="/login"]').waitFor({ state: 'visible', timeout: 20000 });
+
+        return;
+      }
+
+      await this.page.reload({
+        waitUntil: 'domcontentloaded',
+        timeout: 60000,
+      });
+    }
+
+    throw new Error('Automation Exercise is still under heavy load after retries.');
   }
 
   async acceptCookiesIfVisible() {
@@ -34,40 +51,26 @@ export class CheckoutPage {
   }
 
   async login(email: string, password: string) {
-    await this.page
-      .getByRole('link', { name: /Signup \/ Login/i })
-      .click();
+    await this.page.getByRole('link', { name: /Signup \/ Login/i }).click();
 
-    await this.page
-      .locator('[data-qa="login-email"]')
-      .fill(email);
+    await this.page.locator('[data-qa="login-email"]').fill(email);
 
-    await this.page
-      .locator('[data-qa="login-password"]')
-      .fill(password);
+    await this.page.locator('[data-qa="login-password"]').fill(password);
 
-    await this.page
-      .locator('[data-qa="login-button"]')
-      .click();
+    await this.page.locator('[data-qa="login-button"]').click();
 
-    await expect(
-      this.page.getByText(/Logged in as/i)
-    ).toBeVisible({
+    await expect(this.page.getByText(/Logged in as/i)).toBeVisible({
       timeout: 10000,
     });
   }
 
   async openProducts() {
-    await this.page
-      .getByRole('link', { name: /Products/i })
-      .click();
+    await this.page.getByRole('link', { name: /Products/i }).click();
   }
 
   async closeAdvertisementIfVisible() {
     try {
-      const frame = this.page.frameLocator(
-        'iframe[name^="aswift"]'
-      );
+      const frame = this.page.frameLocator('iframe[name^="aswift"]');
 
       const closeButton = frame.getByRole('button', {
         name: /Close ad/i,
@@ -85,8 +88,7 @@ export class CheckoutPage {
   }
 
   async proceedToCheckout() {
-    const checkoutButton =
-      this.page.getByText('Proceed To Checkout');
+    const checkoutButton = this.page.getByText('Proceed To Checkout');
 
     await checkoutButton.waitFor({
       state: 'visible',
@@ -97,10 +99,9 @@ export class CheckoutPage {
   }
 
   async placeOrder() {
-    const placeOrder =
-      this.page.getByRole('link', {
-        name: 'Place Order',
-      });
+    const placeOrder = this.page.getByRole('link', {
+      name: 'Place Order',
+    });
 
     await placeOrder.waitFor({
       state: 'visible',
@@ -111,11 +112,8 @@ export class CheckoutPage {
   }
 
   async expectPaymentPage() {
-    await expect(this.page).toHaveURL(
-      /payment/,
-      {
-        timeout: 15000,
-      }
-    );
+    await expect(this.page).toHaveURL(/payment/, {
+      timeout: 15000,
+    });
   }
 }

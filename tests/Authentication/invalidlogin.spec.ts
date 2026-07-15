@@ -1,6 +1,6 @@
 import { test, expect } from '../../fixtures/fixtures';
 
-test.describe('Invalid Login', () => {
+test.describe('@regression Invalid Login', () => {
   test.beforeEach(async ({ loginPage }) => {
     await loginPage.goto();
     await loginPage.acceptCookiesIfVisible();
@@ -8,7 +8,7 @@ test.describe('Invalid Login', () => {
     await loginPage.expectLoginSection();
   });
 
-  test('Invalid email + valid password', async ({ loginPage }) => {
+  test('@regression Invalid email + valid password', async ({ loginPage }) => {
     await loginPage.fillLoginCredentials({
       email: 'invalid@test.com',
       password: 'Test123!'
@@ -18,7 +18,7 @@ test.describe('Invalid Login', () => {
     await loginPage.expectInvalidCredentialsError();
   });
 
-  test('Valid email + invalid password', async ({ loginPage }) => {
+  test('@regression Valid email + invalid password', async ({ loginPage }) => {
     await loginPage.fillLoginCredentials({
       email: 'abidek@gmail.com',
       password: 'WrongPassword123'
@@ -80,12 +80,13 @@ test.describe('Invalid Login', () => {
     ).toBeFocused();
   });
 
-  test('Email with leading and trailing spaces', async ({ loginPage }) => {
+  test('@regression Email with leading and trailing spaces', async ({ loginPage }) => {
     await loginPage.fillLoginCredentials({
       email: '  abidek@gmail.com  ',
-      password: 'Test123!'
+      password: 'WrongPassword123'
     });
 
     await loginPage.submitLogin();
+    await loginPage.expectInvalidCredentialsError();
   });
 });
