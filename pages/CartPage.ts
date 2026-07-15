@@ -4,11 +4,36 @@ export class CartPage {
   constructor(readonly page: Page) {}
 
   async goto() {
-    await this.page.goto('https://automationexercise.com/products', {
-      waitUntil: 'domcontentloaded',
-      timeout: 60000,
-    });
-    await this.page.waitForLoadState('networkidle', { timeout: 10000 }).catch(() => undefined);
+    for (let attempt = 0; attempt < 3; attempt++) {
+      await this.page.goto('https://automationexercise.com/products', {
+        waitUntil: 'domcontentloaded',
+        timeout: 60000,
+      });
+
+      const heavyLoadHeading = this.page.getByRole('heading', {
+        name: /under heavy load/i,
+      });
+
+      const isHeavyLoad = await heavyLoadHeading.isVisible().catch(() => false);
+
+      if (!isHeavyLoad) {
+        // Anchor on the first product card rather than networkidle, which
+        // stalls indefinitely due to ad iframes on this site.
+        await this.page
+          .locator('.productinfo')
+          .first()
+          .waitFor({ state: 'visible', timeout: 20000 });
+
+        return;
+      }
+
+      await this.page.reload({
+        waitUntil: 'domcontentloaded',
+        timeout: 60000,
+      });
+    }
+
+    throw new Error('Automation Exercise is still under heavy load after retries.');
   }
 
   async acceptCookiesIfVisible() {
@@ -31,12 +56,13 @@ export class CartPage {
 
     await productCard.waitFor({ state: 'visible', timeout: 10000 }).catch(() => undefined);
     await productCard.hover();
-    await this.page.waitForTimeout(500); // Small delay after hover
     await addButton.waitFor({ state: 'visible', timeout: 10000 });
     await addButton.click();
-    
+
     // Wait for the modal to appear
-    await this.page.waitForSelector('.btn.btn-success.close-modal', { timeout: 10000 }).catch(() => undefined);
+    await this.page
+      .waitForSelector('.btn.btn-success.close-modal', { timeout: 10000 })
+      .catch(() => undefined);
     await continueButton.click().catch(() => undefined);
   }
 

@@ -1,7 +1,7 @@
 import { test } from '../../fixtures/fixtures';
 import { SignupData } from '../../pages/SignupPage';
 
-test('User can register a new account', async ({ signupPage }) => {
+test('@smoke @regression User can register a new account', async ({ signupPage }) => {
   const email = `test${Date.now()}@gmail.com`;
   const signupData: SignupData = {
     name: 'First',

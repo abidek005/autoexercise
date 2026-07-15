@@ -2,7 +2,7 @@ import { test, expect } from '../../fixtures/fixtures';
 import { LoginData } from '../../pages/LoginPage';
 
 test.describe('Login', () => {
-  test('User can login with valid credentials', async ({ loginPage }) => {
+  test('@smoke @regression User can login with valid credentials', async ({ loginPage }) => {
     const loginData: LoginData = {
       email: 'abidek@gmail.com',
       password: 'test123',

@@ -1,7 +1,9 @@
 import { test } from '../../fixtures/fixtures';
 
-test.describe('Checkout', () => {
+test.describe('@smoke @regression Checkout', () => {
+
   test.beforeEach(async ({ checkoutPage }) => {
+
     await checkoutPage.goto();
     await checkoutPage.acceptCookiesIfVisible();
 
@@ -12,9 +14,13 @@ test.describe('Checkout', () => {
 
     await checkoutPage.openProducts();
     await checkoutPage.closeAdvertisementIfVisible();
+
   });
 
-  test('User can checkout multiple products', async ({ cartPage, checkoutPage }) => {
+  test('@smoke @checkout User can checkout multiple products', async ({
+    cartPage,
+    checkoutPage,
+  }) => {
 
     await cartPage.addProductToCart(2);
 
