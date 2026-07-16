@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { isStrongPassword } from '../../utils/passwordValidator';
 
-test.describe('@unit Password Validator', () => {
+test.describe('@unit @smoke Password Validator', () => {
   test('Accepts a strong password', () => {
     expect(isStrongPassword('Test123!')).toBeTruthy();
   });

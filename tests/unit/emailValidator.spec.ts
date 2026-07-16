@@ -6,7 +6,7 @@ const isValidEmail =
   (emailValidator as any).default ??
   emailValidator;
 
-test.describe('@unit Email Validator', () => {
+test.describe('@unit @smoke Email Validator', () => {
   test('Accepts a valid email address', () => {
     expect(isValidEmail('john@gmail.com')).toBeTruthy();
   });
