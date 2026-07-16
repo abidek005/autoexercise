@@ -13,6 +13,7 @@
     "pages/**/*.ts",
     "fixtures/**/*.ts",
     "helpers/**/*.ts",
+    "utils/**/*.ts",
     "tests/**/*.ts"
   ]
 }
